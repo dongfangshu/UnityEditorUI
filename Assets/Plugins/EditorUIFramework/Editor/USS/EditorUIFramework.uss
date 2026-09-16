@@ -1,0 +1,68 @@
+/* EditorUIFramework 通用样式表：统一 eui- 前缀类名 */
+
+.eui-field {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.eui-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.eui-field-label {
+    min-width: 120px;
+}
+
+.eui-foldout {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.eui-header {
+    -unity-font-style: bold;
+    font-size: 12px;
+}
+
+.eui-indent {
+    margin-left: 12px;
+}
+
+.eui-list-item {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.eui-list-toolbar {
+    flex-direction: row;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.eui-item-button {
+    min-width: 22px;
+    margin-left: 2px;
+}
+
+.eui-dict-row {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.eui-dict-key {
+    min-width: 120px;
+    -unity-font-style: bold;
+}
+
+.eui-unsupported {
+    color: rgb(136, 136, 136);
+    -unity-font-style: italic;
+}
+
+.eui-error {
+    color: rgb(220, 80, 80);
+}

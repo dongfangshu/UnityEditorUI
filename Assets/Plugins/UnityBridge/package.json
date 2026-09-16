@@ -1,0 +1,9 @@
+{
+  "name": "com.dsh.unitybridge",
+  "version": "1.0.0",
+  "displayName": "DSH Unity Bridge",
+  "description": "File-queue bridge that lets an agent drive the Unity editor through four capability domains: read (unified read interface over assets, hierarchy, selection), execute (Roslyn C# as the single write path), log (console ring), and core (editor-session operations). Editor-only, zero network ports.",
+  "unity": "2022.3",
+  "keywords": ["dsh", "bridge", "automation", "roslyn"],
+  "author": { "name": "DSH" }
+}
