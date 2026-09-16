@@ -30,12 +30,13 @@ namespace EditorUIFramework
 
         static bool IsKeySupported(Type t) => SupportedKeyTypes.Contains(t) || t.IsEnum;
 
-        public override void Setup()
+        protected override void OnSetup()
         {
             _dict = Data.GetValue() as IDictionary;
             if (_dict == null)
             {
-                Add(UnsupportedLabel("null 字典，暂不支持创建"));
+                MainControl = UnsupportedLabel("null 字典，暂不支持创建");
+                Add(MainControl);
                 return;
             }
 
@@ -54,6 +55,7 @@ namespace EditorUIFramework
 
             _foldout = new Foldout { text = Title(), value = true };
             _foldout.AddToClassList("eui-foldout");
+            MainControl = _foldout;
             Add(_foldout);
 
             _rows = new VisualElement();
@@ -115,6 +117,7 @@ namespace EditorUIFramework
             if (UndoTarget != null)
                 Undo.RecordObject(UndoTarget, $"Add {Data.Name}");
             _dict.Add(key, DefaultValue(_valueType));
+            Data.SetValue(_dict); // lua 条目袋触发序列化回写
             if (UndoTarget != null)
                 EditorUtility.SetDirty(UndoTarget);
             if (_errorLabel != null) _errorLabel.text = string.Empty;
@@ -126,9 +129,17 @@ namespace EditorUIFramework
             if (UndoTarget != null)
                 Undo.RecordObject(UndoTarget, $"Remove {Data.Name}");
             _dict.Remove(key);
+            Data.SetValue(_dict); // lua 条目袋触发序列化回写
             if (UndoTarget != null)
                 EditorUtility.SetDirty(UndoTarget);
             RebuildRows();
+        }
+
+        /// <summary>子元素改值冒泡：同步写回（lua 场景下字典是字符串物化缓存，必须回写）。</summary>
+        public override void OnValueChanged()
+        {
+            Data.SetValue(_dict);
+            base.OnValueChanged();
         }
 
         void RebuildRows()

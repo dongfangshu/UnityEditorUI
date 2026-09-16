@@ -40,6 +40,9 @@ v1 落地：CustomEditorBase（继承 Editor）在创建时反射目标对象构
 - [10-customeditorbase](issues/10-customeditorbase.md) — CreateInspectorGUI 装配（USS→RootFieldData→工厂→根 Setup），undoRedoPerformed 重建
 - [11-demo-and-compile-verify](issues/11-demo-and-compile-verify.md) — 编译零错误零警告；端到端验证通过（205 元素/6 Foldout/6 类值回写）；工厂特判 RootFieldData→ObjectElement；2022.3 API 坑见票据
 - [13-datahost-inspector](issues/13-datahost-inspector.md) — 纯数据对象上 Inspector：Runtime 程序集（[DataObject] + DataHost[SerializeReference]）+ CreateRootData/UndoHost/OnCreateHeader 钩子 + DataHostEditor 类型下拉（确认弹窗）；验证全通过
+- [14-odin-attributes](issues/14-odin-attributes.md) — Odin/Unity 特性兼容层：OdinCompat 零依赖反射读取（Sirenix+UnityEngine 双候选）；Setup 模板方法化；LabelText/Tooltip/HideLabel/ReadOnly/Range/MinMax/TextArea/Title/Header/ShowIf/HideIf/Button 全实测通过
+- [15-lua-host](issues/15-lua-host.md) — LuaHost：EmmyLua 注解解析 + LuaFieldData 值袋（字符串↔类型转换）+ 工厂谓词接 LuaSchemaElement；目录浏览+文件下拉+保值同步；v1/v2 写回实测通过
+- [16-lua-collections](issues/16-lua-collections.md) — lua 泛型集合：LuaTypeMap 递归泛型解析 + LuaValue 字面量往返（Runtime）+ List/DictElement 写回钩子 + LuaHost.GetLuaData() 导出 lua 表
 
 **v1 全部票据已解决，目的地达成。**
 
@@ -47,7 +50,7 @@ v1 落地：CustomEditorBase（继承 Editor）在创建时反射目标对象构
 
 - T[] 数组支持（机制同 List<T>，增删需 Array.Resize）。
 - 多目标编辑（CanEditMultipleObjects）。
-- attribute 驱动 UI（Header / Tooltip / Range / Min → element 装饰）。
+- 更多特性：FoldoutGroup/TabGroup 分组、ValidateInput/Required 校验、ShowInInspector（属性）、ValueDropdown、ColorPalette、EnumToggleButtons、带参 Button。
 - HashSet / SortedDictionary 等其他集合类型。
 - 属性（Property）展示与校验装饰。
 

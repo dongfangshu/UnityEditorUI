@@ -254,8 +254,8 @@ MonoBehaviour:
   longValue: 1234569293854
   text: "\u5012\u8428\u5927"
   quality: 0
-  flags: 3
-  targetTransform: {fileID: 1440889283}
+  flags: 0
+  targetTransform: {fileID: 321274884}
   icon: {fileID: 0}
   vec2: {x: 6.77, y: 2}
   vec3: {x: 1, y: 2, z: 3}
@@ -277,6 +277,13 @@ MonoBehaviour:
     weight: 0.5
     pivot: {x: 0, y: 0}
   privateBacked: 7
+  hp: 80
+  id: DEMO-001
+  showAdvanced: 0
+  advancedValue: 2.718
+  basicOnly: 5
+  note: "\u591A\u884C\n\u5907\u6CE8"
+  score: 9999
 --- !u!4 &724055426
 Transform:
   m_ObjectHideFlags: 0
@@ -284,6 +291,126 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 724055424}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1011516038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 1011516040}
+  - component: {fileID: 1011516039}
+  m_Layer: 0
+  m_LogicLayerMask: 0
+  m_Name: LuaHostAgentTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1011516039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011516038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beda75d8d31b64541b900ffc1fceb935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  luaFolder: Assets/Lua
+  luaFile: Assets/Lua/TestClass.lua
+  fields:
+  - name: v1
+    type: int
+    value: 0
+  - name: v2
+    type: long
+    value: 0
+  - name: v3
+    type: List<int>
+    value: '{ 2, 1 }'
+--- !u!4 &1011516040
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011516038}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1268202061
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 1268202063}
+  - component: {fileID: 1268202062}
+  m_Layer: 0
+  m_LogicLayerMask: 0
+  m_Name: DataHostAgentTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1268202062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268202061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47b8b23fff7db2543bce98708a1bf132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target:
+    rid: 8080480655517679618
+  references:
+    version: 2
+    RefIds:
+    - rid: 8080480655517679618
+      type: {class: DemoPlayerData, ns: UIDemo, asm: Assembly-CSharp}
+      data:
+        playerName: "\u73A9\u5BB6"
+        level: 1
+        hp: 100
+        spawnPoint: {x: 0, y: 1, z: 0}
+        buffs:
+        - "\u52A0\u901F"
+        detail:
+          title: "\u5D4C\u5957\u7C7B"
+          count: 3
+          tint: {r: 0, g: 1, b: 1, a: 1}
+--- !u!4 &1268202063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268202061}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -394,3 +521,5 @@ SceneRoots:
   - {fileID: 321274884}
   - {fileID: 1440889283}
   - {fileID: 724055426}
+  - {fileID: 1268202063}
+  - {fileID: 1011516040}

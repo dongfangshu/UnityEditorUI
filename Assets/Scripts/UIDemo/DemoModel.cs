@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UIDemo
@@ -60,5 +61,34 @@ namespace UIDemo
 
         [SerializeField]
         int privateBacked = 7;
+
+        [LabelText("生命值"), Range(0f, 100f), Tooltip("当前生命值（Slider）")]
+        public float hp = 80f;
+
+        [ReadOnly]
+        public string id = "DEMO-001";
+
+        [Title("高级设置")]
+        public bool showAdvanced;
+
+        [ShowIf("showAdvanced")]
+        public double advancedValue = 2.718;
+
+        [HideIf("showAdvanced")]
+        public int basicOnly = 5;
+
+        [HideLabel, TextArea]
+        public string note = "多行\n备注";
+
+        [MinValue(0), MaxValue(9999)]
+        public long score = 100;
+
+        [Button("重置数据")]
+        void ResetData()
+        {
+            hp = 100f;
+            intValue = 0;
+            text = "reset";
+        }
     }
 }

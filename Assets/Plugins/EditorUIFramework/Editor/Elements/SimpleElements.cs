@@ -10,37 +10,63 @@ namespace EditorUIFramework
     {
         public BoolElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
             var field = new Toggle(DisplayName) { value = Data.GetValue() is bool v && v };
             field.RegisterValueChangedCallback(e => CommitValue(e.newValue));
+            MainControl = field;
             Add(field);
         }
     }
 
-    /// <summary>int → IntegerField</summary>
+    /// <summary>int → IntegerField；[Range] 时 → SliderInt</summary>
     public class IntElement : FieldElement
     {
         public IntElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
-            var field = new IntegerField(DisplayName) { value = Convert.ToInt32(Data.GetValue() ?? 0) };
-            field.RegisterValueChangedCallback(e => CommitValue(e.newValue));
-            Add(field);
+            var range = OdinCompat.Get(FieldInfo, OdinCompat.Range);
+            if (range != null)
+            {
+                int min = (int)OdinCompat.Read<float>(range, "Min", "min");
+                int max = (int)OdinCompat.Read<float>(range, "Max", "max");
+                var slider = new SliderInt(DisplayName, min, max) { value = Convert.ToInt32(Data.GetValue() ?? 0) };
+                slider.RegisterValueChangedCallback(e => CommitValue(e.newValue));
+                MainControl = slider;
+            }
+            else
+            {
+                var field = new IntegerField(DisplayName) { value = Convert.ToInt32(Data.GetValue() ?? 0) };
+                field.RegisterValueChangedCallback(e => CommitValue(ClampNumeric(e.newValue)));
+                MainControl = field;
+            }
+            Add(MainControl);
         }
     }
 
-    /// <summary>float → FloatField</summary>
+    /// <summary>float → FloatField；[Range] 时 → Slider</summary>
     public class FloatElement : FieldElement
     {
         public FloatElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
-            var field = new FloatField(DisplayName) { value = Convert.ToSingle(Data.GetValue() ?? 0f) };
-            field.RegisterValueChangedCallback(e => CommitValue(e.newValue));
-            Add(field);
+            var range = OdinCompat.Get(FieldInfo, OdinCompat.Range);
+            if (range != null)
+            {
+                var slider = new Slider(DisplayName, OdinCompat.Read<float>(range, "Min", "min"), OdinCompat.Read<float>(range, "Max", "max"))
+                { value = Convert.ToSingle(Data.GetValue() ?? 0f) };
+                slider.RegisterValueChangedCallback(e => CommitValue(e.newValue));
+                MainControl = slider;
+            }
+            else
+            {
+                var field = new FloatField(DisplayName) { value = Convert.ToSingle(Data.GetValue() ?? 0f) };
+                field.RegisterValueChangedCallback(e => CommitValue(ClampNumeric(e.newValue)));
+                MainControl = field;
+            }
+            Add(MainControl);
         }
     }
 
@@ -49,10 +75,11 @@ namespace EditorUIFramework
     {
         public DoubleElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
             var field = new DoubleField(DisplayName) { value = Convert.ToDouble(Data.GetValue() ?? 0d) };
-            field.RegisterValueChangedCallback(e => CommitValue(e.newValue));
+            field.RegisterValueChangedCallback(e => CommitValue(ClampNumeric(e.newValue)));
+            MainControl = field;
             Add(field);
         }
     }
@@ -62,23 +89,27 @@ namespace EditorUIFramework
     {
         public LongElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
             var field = new LongField(DisplayName) { value = Convert.ToInt64(Data.GetValue() ?? 0L) };
-            field.RegisterValueChangedCallback(e => CommitValue(e.newValue));
+            field.RegisterValueChangedCallback(e => CommitValue(ClampNumeric(e.newValue)));
+            MainControl = field;
             Add(field);
         }
     }
 
-    /// <summary>string → TextField</summary>
+    /// <summary>string → TextField；[TextArea] 时多行</summary>
     public class StringElement : FieldElement
     {
         public StringElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
             var field = new TextField(DisplayName) { value = Data.GetValue() as string ?? string.Empty };
+            if (OdinCompat.Has(FieldInfo, OdinCompat.TextArea))
+                field.multiline = true;
             field.RegisterValueChangedCallback(e => CommitValue(e.newValue));
+            MainControl = field;
             Add(field);
         }
     }
@@ -88,7 +119,7 @@ namespace EditorUIFramework
     {
         public EnumElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
             var type = Data.BaseType;
             var value = Data.GetValue() as Enum ?? (Enum)Activator.CreateInstance(type);
@@ -96,6 +127,7 @@ namespace EditorUIFramework
             var field = new EnumField(DisplayName);
             field.Init(value, flags);
             field.RegisterValueChangedCallback(e => CommitValue(e.newValue));
+            MainControl = field;
             Add(field);
         }
     }
@@ -105,7 +137,7 @@ namespace EditorUIFramework
     {
         public ObjectFieldElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
             var field = new ObjectField(DisplayName)
             {
@@ -113,6 +145,7 @@ namespace EditorUIFramework
                 value = Data.GetValue() as UnityEngine.Object
             };
             field.RegisterValueChangedCallback(e => CommitValue(e.newValue));
+            MainControl = field;
             Add(field);
         }
     }
@@ -122,10 +155,11 @@ namespace EditorUIFramework
     {
         public ColorElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
             var field = new ColorField(DisplayName) { value = Data.GetValue() is Color c ? c : Color.white };
             field.RegisterValueChangedCallback(e => CommitValue(e.newValue));
+            MainControl = field;
             Add(field);
         }
     }
@@ -140,9 +174,10 @@ namespace EditorUIFramework
             _reason = reason;
         }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
-            Add(UnsupportedLabel(_reason));
+            MainControl = UnsupportedLabel(_reason);
+            Add(MainControl);
         }
     }
 }

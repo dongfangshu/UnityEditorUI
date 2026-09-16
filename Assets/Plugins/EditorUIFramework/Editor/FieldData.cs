@@ -37,6 +37,12 @@ namespace EditorUIFramework
             _owner = owner;
         }
 
+        /// <summary>底层反射字段（特性读取用）。</summary>
+        public FieldInfo Info => _field;
+
+        /// <summary>字段所属实例（ShowIf/HideIf 条件求值用）。</summary>
+        public object Owner => _owner;
+
         public override Type BaseType => _field.FieldType;
         public override object GetValue() => _field.GetValue(_owner);
         public override void SetValue(object value) => _field.SetValue(_owner, value);

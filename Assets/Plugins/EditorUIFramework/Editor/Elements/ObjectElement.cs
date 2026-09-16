@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -18,18 +19,20 @@ namespace EditorUIFramework
 
         public ObjectElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
             _instance = Data.GetValue();
 
             if (Data is RootFieldData)
             {
                 _body = this; // 根节点不包 Foldout
+                MainControl = this;
             }
             else
             {
                 var foldout = new Foldout { text = DisplayName, value = true };
                 foldout.AddToClassList("eui-foldout");
+                MainControl = foldout;
                 Add(foldout);
                 _body = new VisualElement();
                 _body.AddToClassList("eui-indent");
@@ -52,6 +55,32 @@ namespace EditorUIFramework
                 element.UndoTarget = UndoTarget;
                 _body.Add(element);
                 element.Setup();
+            }
+
+            CreateMethodButtons();
+        }
+
+        /// <summary>扫描 [Button] 无参方法，生成按钮；调用走 Undo + struct 回写链。</summary>
+        void CreateMethodButtons()
+        {
+            const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            foreach (var m in Data.BaseType.GetMethods(Flags))
+            {
+                var attr = OdinCompat.Get(m, OdinCompat.Button);
+                if (attr == null || m.GetParameters().Length != 0) continue;
+
+                var label = OdinCompat.Read<string>(attr, "Name");
+                if (string.IsNullOrEmpty(label)) label = NameUtil.Nicify(m.Name);
+
+                var method = m;
+                var button = new Button(() =>
+                {
+                    if (UndoTarget != null) Undo.RecordObject(UndoTarget, method.Name);
+                    method.Invoke(_instance, null);
+                    if (UndoTarget != null) EditorUtility.SetDirty(UndoTarget);
+                    OnValueChanged(); // struct 时回写装箱实例 + 重估条件
+                }) { text = label };
+                _body.Add(button);
             }
         }
 

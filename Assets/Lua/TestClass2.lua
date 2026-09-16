@@ -1,0 +1,5 @@
+---@class TestClass2
+---@field name string 名称
+---@field hp float 血量
+---@field rate number 比率
+---@field vip bool 会员

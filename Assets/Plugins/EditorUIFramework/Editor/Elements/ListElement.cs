@@ -18,12 +18,13 @@ namespace EditorUIFramework
 
         public ListElement(FieldData data) : base(data) { }
 
-        public override void Setup()
+        protected override void OnSetup()
         {
             _list = Data.GetValue() as IList;
             if (_list == null)
             {
-                Add(UnsupportedLabel("null 列表，暂不支持创建"));
+                MainControl = UnsupportedLabel("null 列表，暂不支持创建");
+                Add(MainControl);
                 return;
             }
 
@@ -32,6 +33,7 @@ namespace EditorUIFramework
 
             _foldout = new Foldout { text = Title(), value = true };
             _foldout.AddToClassList("eui-foldout");
+            MainControl = _foldout;
             Add(_foldout);
 
             _items = new VisualElement();
@@ -89,9 +91,17 @@ namespace EditorUIFramework
             if (UndoTarget != null)
                 Undo.RecordObject(UndoTarget, action);
             op();
+            Data.SetValue(_list); // 反射列表为无害重设；lua 条目袋触发序列化回写
             if (UndoTarget != null)
                 EditorUtility.SetDirty(UndoTarget);
             RebuildItems();
+        }
+
+        /// <summary>子元素改值冒泡：同步写回（lua 场景下列表是字符串物化缓存，必须回写）。</summary>
+        public override void OnValueChanged()
+        {
+            Data.SetValue(_list);
+            base.OnValueChanged();
         }
 
         void AddItem() =>
