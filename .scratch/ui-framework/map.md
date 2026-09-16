@@ -39,6 +39,7 @@ v1 落地：CustomEditorBase（继承 Editor）在创建时反射目标对象构
 - [09-object-element](issues/09-object-element.md) — 继承链字段收集规则 + struct 装箱回写冒泡；根节点不包 Foldout
 - [10-customeditorbase](issues/10-customeditorbase.md) — CreateInspectorGUI 装配（USS→RootFieldData→工厂→根 Setup），undoRedoPerformed 重建
 - [11-demo-and-compile-verify](issues/11-demo-and-compile-verify.md) — 编译零错误零警告；端到端验证通过（205 元素/6 Foldout/6 类值回写）；工厂特判 RootFieldData→ObjectElement；2022.3 API 坑见票据
+- [13-datahost-inspector](issues/13-datahost-inspector.md) — 纯数据对象上 Inspector：Runtime 程序集（[DataObject] + DataHost[SerializeReference]）+ CreateRootData/UndoHost/OnCreateHeader 钩子 + DataHostEditor 类型下拉（确认弹窗）；验证全通过
 
 **v1 全部票据已解决，目的地达成。**
 
