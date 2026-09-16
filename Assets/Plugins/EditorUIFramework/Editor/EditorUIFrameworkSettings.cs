@@ -13,6 +13,9 @@ namespace EditorUIFramework
     {
         const string DefaultAssetPath = "Assets/Plugins/EditorUIFramework/Editor/EditorUIFrameworkSettings.asset";
 
+        /// <summary>框架样式表路径；检视器根节点与各弹窗都从这里加载。</summary>
+        public const string UssPath = "Assets/Plugins/EditorUIFramework/Editor/USS/EditorUIFramework.uss";
+
         [Tooltip("枚举选择弹窗尺寸")]
         public Vector2 enumPopupSize = new Vector2(240f, 260f);
 

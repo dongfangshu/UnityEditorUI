@@ -38,6 +38,9 @@ namespace UIDemo
         public override void OnOpen()
         {
             var root = editorWindow.rootVisualElement;
+            // 弹窗是独立的编辑器窗口，不会继承检视器的样式表，必须自己加载
+            var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>(EditorUIFrameworkSettings.UssPath);
+            if (uss != null) root.styleSheets.Add(uss);
             root.AddToClassList("eui-enum-popup");
 
             _search = new TextField { tooltip = "搜索名称或 id" };

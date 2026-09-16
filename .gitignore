@@ -10,6 +10,9 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+# Agent scratch workspace (反编译产物、对照截图等临时文件)
+/.scratch/
+
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/

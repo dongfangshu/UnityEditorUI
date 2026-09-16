@@ -30,7 +30,7 @@ namespace EditorUIFramework
             }
             else
             {
-                var foldout = new Foldout { text = DisplayName, value = true };
+                var foldout = CreateFoldout(DisplayName);
                 foldout.AddToClassList("eui-foldout");
                 MainControl = foldout;
                 Add(foldout);

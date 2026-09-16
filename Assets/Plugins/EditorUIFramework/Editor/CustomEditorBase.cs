@@ -11,7 +11,7 @@ namespace EditorUIFramework
     /// </summary>
     public abstract class CustomEditorBase : Editor
     {
-        const string UssPath = "Assets/Plugins/EditorUIFramework/Editor/USS/EditorUIFramework.uss";
+        const string UssPath = EditorUIFrameworkSettings.UssPath;
 
         VisualElement _host;
         FieldElement _root;

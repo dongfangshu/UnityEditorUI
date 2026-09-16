@@ -26,6 +26,12 @@ namespace EditorUIFramework
         /// <summary>元素的主控件（OnSetup 中赋值），特性修饰（tooltip/禁用等）作用于它。</summary>
         protected VisualElement MainControl { get; set; }
 
+        /// <summary>
+        /// 隐藏字段标签（集合元素用）。Odin 的 CollectionDrawer 给元素传的 GUIContent 默认为 null
+        /// （仅 ShowIndexLabels 时才给索引文本），单行控件因此铺满整行；本框架用同名开关对齐该行为。
+        /// </summary>
+        public bool HideLabel { get; set; }
+
         System.Func<bool> _visibilityCondition;
         List<FieldElement> _conditionals; // 仅根节点使用
 
@@ -40,6 +46,9 @@ namespace EditorUIFramework
         {
             OnSetup();
             ApplyAttributes();
+            // 无标签形态：MainControl 若是 BaseField，隐藏其 label 并清掉 label 占位（见 USS .eui-label-hidden）
+            if (HideLabel && MainControl != null)
+                MainControl.AddToClassList("eui-label-hidden");
         }
 
         /// <summary>构建视觉、读取初值、挂值变更回调；复合元素在此经工厂构造子元素并调用子 Setup()。</summary>
@@ -58,6 +67,7 @@ namespace EditorUIFramework
         {
             get
             {
+                if (HideLabel) return string.Empty;
                 var f = FieldInfo;
                 if (f != null)
                 {
@@ -226,6 +236,20 @@ namespace EditorUIFramework
             var label = new Label($"{DisplayName}: {reason}");
             label.AddToClassList("eui-unsupported");
             return label;
+        }
+
+        /// <summary>
+        /// 统一的 Foldout 构造。Unity 内置样式把 Foldout 内部的 Toggle 左移 12px
+        /// （内置用法假定 Foldout 相对父容器有 12px 缩进）。本框架的 Foldout 与容器左边界对齐，
+        /// 若不抵消这次偏移，折叠三角会画到容器外（列表标题栏尤其明显）。
+        /// </summary>
+        protected static Foldout CreateFoldout(string text, bool value = true)
+        {
+            var foldout = new Foldout { text = text, value = value };
+            var toggle = foldout.Q<Toggle>();
+            if (toggle != null)
+                toggle.style.marginLeft = 0;
+            return foldout;
         }
     }
 

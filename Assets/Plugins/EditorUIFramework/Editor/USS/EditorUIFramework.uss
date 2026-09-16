@@ -39,43 +39,221 @@
     margin-left: 12px;
 }
 
-/* 列表/字典行：圆角 + 悬停反馈 */
+/* ── 列表：一比一复刻 Odin CollectionDrawer<T>（常量取自反编译 Sirenix.OdinInspector.Editor）─────
+   行：listItemOptions MinHeight(25) + ListItemStyle padding(25,20,3,3)，
+       斑马纹 ListItemColorEven/Odd（Pro 皮肤 #3C3C3C / #333333），allowHover:false（行不响应悬停）。
+   下列叠色是同一明暗关系的主题无关写法：暗色主题下恰好还原 Odin 的原值。 */
 .eui-list-item {
     flex-direction: row;
-    align-items: flex-start;
-    margin-top: 1px;
-    margin-bottom: 1px;
-    padding: 2px 3px;
-    border-radius: 3px;
+    align-items: center;
+    min-height: 25px;
+    /* Odin ListItemStyle padding(25,20,3,3)：左 25 直接给出；右侧 20 由 4 + 删除键 14 + 2 合成 */
+    padding: 3px 4px 3px 25px;
+    background-color: rgba(255, 255, 255, 0.02); /* ≈ Odin even #3C3C3C */
 }
 
-.eui-list-item:hover {
-    background-color: rgba(128, 128, 128, 0.10);
+.eui-list-item-odd {
+    background-color: rgba(0, 0, 0, 0.09); /* ≈ Odin odd #333333 */
 }
 
-.eui-dict-row {
+/* 列表体：Odin BeginVerticalList(drawBorder:true, drawDarkBg:true) → 1px 边框 + 深底 #1A1A1A。
+   深底只在行间缝隙露出（Odin 行是紧排的），故此处保留透明，让行色直接叠在检视面板底色上：
+   even 2% 白 ≈ #3C3C3C、odd 9% 黑 ≈ #333333，与 Odin 的斑马纹取值一致。 */
+.eui-list-body {
+    background-color: transparent;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.45); /* ≈ Odin BorderColor rgba(28,28,28,0.8) */
+}
+
+/* ── 字典：对齐 Odin DictionaryDrawer 的 OneLine 模式 ──────────────────────────
+   行与列表同款（斑马纹 / 行高 25 / 把手 20×20 / ✕ 14×14），额外有 Key/Value 列标题行、
+   Key 列右侧的竖分隔线，以及由标题栏加号切换的「添加键值对」面板。 */
+.eui-dict-columns {
     flex-direction: row;
-    align-items: flex-start;
-    margin-top: 1px;
-    margin-bottom: 1px;
-    padding: 2px 3px;
-    border-radius: 3px;
+    align-items: center;
+    height: 20px;
+    padding-left: 25px;  /* 与行内容起点对齐（行左侧是把手的位置） */
+    padding-right: 20px;
+    border-bottom-width: 1px;
+    border-color: rgba(0, 0, 0, 0.35);
 }
 
-.eui-dict-row:hover {
-    background-color: rgba(128, 128, 128, 0.10);
+.eui-dict-column-key,
+.eui-dict-column-value {
+    font-size: 10px;
+    color: rgb(128, 128, 128);
+    -unity-text-align: middle-center;
 }
 
-.eui-dict-key {
+.eui-dict-column-key {
+    width: 120px;
     min-width: 120px;
-    -unity-font-style: bold;
-    opacity: 0.85;
 }
 
-.eui-list-toolbar {
-    flex-direction: row;
-    margin-top: 3px;
+.eui-dict-column-value {
+    flex-grow: 1;
+}
+
+/* 行内 Key 列：Odin 在 Key 与 Value 之间画一条竖线 */
+.eui-dict-key {
+    width: 120px;
+    min-width: 120px;
+    margin-right: 6px;
+    padding-right: 6px;
+    flex-shrink: 0;
+    overflow: hidden;
+    color: rgba(200, 200, 200, 0.9);
+    -unity-text-align: middle-left;
+    border-right-width: 1px;
+    border-color: rgba(0, 0, 0, 0.35);
+}
+
+/* 添加键值对面板：Odin 的 DrawAddKey（一块带底纹和边框的区域） */
+.eui-dict-add-panel {
+    padding: 4px;
     margin-bottom: 2px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.35);
+}
+
+.eui-dict-add-button {
+    margin-top: 4px;
+    min-height: 18px;
+}
+
+/* 折叠三角：抵消 Unity 内置样式对 Foldout 内部 Toggle 的 -12px 左移
+   （内置用法假定 Foldout 有 12px 缩进；本框架 Foldout 与容器左边界对齐，不抵消就会画到容器外）。
+   C# 侧 CreateFoldout 也设了同样的 inline 样式，这里作为兜底。 */
+.eui-list-foldout > .unity-foldout__toggle,
+.eui-foldout > .unity-foldout__toggle {
+    margin-left: 0;
+}
+
+/* 列表标题栏 = Odin 的 BeginHorizontalToolbar（高 22，Unity toolbar 底色 + 上下 1px 暗边）：
+   折叠三角 + 字段名 → 弹性空白 → "N items" 灰字 → 工具栏加号 */
+.eui-list-header {
+    flex-direction: row;
+    align-items: center;
+    min-height: 22px;
+    padding-left: 1px;
+    padding-right: 1px;
+    background-color: rgba(255, 255, 255, 0.02); /* ≈ Unity toolbar 底色 #3C3C3C */
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-color: rgba(0, 0, 0, 0.35);
+}
+
+.eui-list-foldout {
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: auto; /* 覆盖 Unity 默认 width:100%，否则在 row 里把计数与加号挤出 */
+    min-width: 0;
+}
+
+/* 计数文本：Odin 用 centeredGreyMiniLabel（字号 10 / 灰色 / margin 4）显示 "N items" */
+.eui-list-count {
+    font-size: 10px;
+    color: rgb(128, 128, 128);
+    margin-left: 4px;
+    margin-right: 4px;
+    flex-shrink: 0;
+}
+
+/* 工具栏加号：Odin 用 ToolbarButton(SdfIconType.Plus)（Unity toolbarButton，固定高 20、居中） */
+.eui-toolbar-button {
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+    font-size: 12px;
+    -unity-text-align: middle-center;
+    color: rgb(200, 200, 200);
+    background-color: rgba(255, 255, 255, 0.04);
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.45);
+    border-radius: 2px;
+}
+
+.eui-toolbar-button:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.eui-toolbar-button:active {
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+/* 列表行拖拽把手：Odin 的 DragHandleRect 为 20×20（距行左 4、行内垂直居中、绘制透明度 0.4；
+   多行元素如 Element N 折叠条同样是居中，见 DrawItem 的 y + 2 + (h-23)/2）。
+   Odin 里把手绝对定位绘制、不参与布局，这里同样脱出布局流，行高才严格等于 25。 */
+.eui-drag-handle {
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    translate: 0 -50%;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.4;
+}
+
+.eui-drag-handle:hover {
+    opacity: 0.9;
+}
+
+.eui-drag-bar {
+    width: 12px;
+    height: 2px;
+    background-color: rgb(200, 200, 200);
+    border-radius: 1px;
+    margin: 1.5px 0;
+    flex-shrink: 0;
+}
+
+/* 拖拽源行：原位蓝色高亮（Odin 式） */
+.eui-list-item-dragging {
+    background-color: rgba(64, 128, 255, 0.30);
+    border-radius: 3px;
+}
+
+/* 拖拽浮动副本：半透明跟手 */
+.eui-drag-ghost {
+    opacity: 0.75;
+    background-color: rgba(64, 128, 255, 0.12);
+    border-radius: 3px;
+}
+
+/* 浮动副本的值占位块（模拟输入框，高度对齐 Odin 行内容区 25-3-3） */
+.eui-ghost-value {
+    flex-grow: 1;
+    min-height: 18px;
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+/* 列表行删除键：Odin 的 RemoveBtnRect 为 14×14（贴行右内边距 4，行内垂直居中） */
+.eui-list-remove {
+    width: 14px;
+    min-width: 14px;
+    height: 14px;
+    margin: 0 0 0 2px; /* 与值控件留 2px：内容右端距行右恰好 20，对齐 Odin 的 padding.right */
+    padding: 0;
+    flex-shrink: 0;
+    font-size: 10px;
+    -unity-text-align: middle-center;
+    color: rgb(170, 170, 170);
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 2px;
+}
+
+.eui-list-remove:hover {
+    color: rgb(230, 230, 230);
+    background-color: rgba(255, 255, 255, 0.08);
 }
 
 /* 小按钮：圆角 + 悬停 */
@@ -121,13 +299,43 @@
 }
 
 /* 行内布局防溢出：字段可收缩，按钮不收缩 */
-.eui-list-item .eui-field,
-.eui-dict-row .eui-field {
+.eui-list-item .eui-field {
     flex-shrink: 1;
 }
 
-.eui-list-item,
-.eui-dict-row {
+/* 列表行内的值控件：清掉 .eui-field 与 BaseField 的上下外边距，
+   使控件高 18（Odin 单行控件高）、行高严格等于 Odin 的 25 */
+.eui-list-item > .eui-field {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.eui-list-item > .eui-field > .unity-base-field {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* 无标签形态（Odin 的集合元素默认不给标签）：隐藏 BaseField 的 label 占位，输入控件铺满整行 */
+.eui-label-hidden > .unity-base-field__label {
+    display: none;
+}
+
+.eui-label-hidden > .unity-base-field__input {
+    margin-left: 0;
+}
+
+/* 列表内的复合元素（List&lt;SomeStruct&gt; 的 "Element N"）：Odin 里只是普通折叠条，
+   没有分组卡片背景/边框，故取消 .eui-foldout 的卡片化外观 */
+.eui-list-item .eui-foldout {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 0;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.eui-list-item {
     overflow: hidden;
 }
 
@@ -135,33 +343,94 @@
     flex-shrink: 0;
 }
 
-/* 枚举搜索弹窗 */
+/* ── 枚举搜索弹窗：外观对齐 Odin 的 EnumSelector 下拉 ──────────────────────────
+   顶部工具栏式搜索框（内嵌放大镜图标） + 选项列表（标记列 + 名称）；
+   选中项 = 绿色 ✓ + 行背景高亮，未选中的 flags 位 = 空心 ○，All 行不画标记（仅占位对齐）。 */
 .eui-enum-popup {
     padding: 5px;
+}
+
+/* 枚举弹窗专用：搜索框做成 Odin 那样的整条工具栏，故去掉整体内边距。
+   底色由 C#（EnumPickerPopup）直接设为 Odin 的深色 —— Unity 给弹窗根元素设了 inline 底色，USS 压不住；
+   这里只提供边框与圆角（Pro 皮肤实测：边框 #1D1D1D、圆角约 4px）。 */
+.eui-enum-popup-toolbar {
+    padding: 0;
+    border-width: 1px;
+    border-color: rgb(29, 29, 29); /* Odin 弹窗边框 #1D1D1D */
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    overflow: hidden; /* 让圆角裁掉内部子元素 */
+}
+
+.eui-enum-search-row {
+    flex-direction: row;
+    align-items: center;
+    height: 22px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-bottom-width: 1px;
+    border-color: rgba(0, 0, 0, 0.16); /* ≈ Odin 行间分隔线 #292929 */
+}
+
+.eui-enum-search-icon {
+    position: absolute;
+    left: 9px;
+    top: 50%;
+    translate: 0 -50%;
+    width: 12px;
+    height: 12px;
+    opacity: 0.55;
 }
 
 .eui-enum-search {
     margin-bottom: 4px;
 }
 
+.eui-enum-search-row .eui-enum-search {
+    flex-grow: 1;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* 输入文字避开放大镜图标 */
+.eui-enum-search-row .eui-enum-search .unity-text-input {
+    padding-left: 16px;
+}
+
+/* 选项行：Odin 行高 22，行间以比底色更暗的 1px 线分隔（Pro 实测 #292929）。
+   注意：不要用 :last-child 去掉末行的线 —— UITK 在 ScrollView 里会把该伪类匹配到所有子元素，
+   结果一条线都不画（已踩坑）。末行的线与弹窗下边框重合，视觉上等同 Odin。 */
 .eui-enum-item {
     flex-direction: row;
     align-items: center;
-    padding: 4px 6px;
-    border-radius: 3px;
+    height: 22px;
+    padding-left: 4px;
+    padding-right: 8px;
+    border-bottom-width: 1px;
+    border-color: rgba(0, 0, 0, 0.16);
 }
 
 .eui-enum-item:hover {
     background-color: rgba(128, 128, 128, 0.15);
 }
 
-.eui-enum-circle {
-    width: 16px;
-    -unity-text-align: middle-center;
-    color: rgb(150, 150, 150);
+/* Odin 不用背景标记选中项，只靠标记列的绿色 ✓（保留类名便于定制） */
+.eui-enum-item-selected {
+    background-color: rgba(255, 255, 255, 0);
 }
 
-.eui-enum-circle-on {
+/* 标记列（✓ / ○）：定宽，保证各行文字左对齐 */
+.eui-enum-marker {
+    width: 22px;
+    min-width: 22px;
+    -unity-text-align: middle-center;
+    color: rgb(150, 150, 150);
+    font-size: 11px;
+}
+
+.eui-enum-marker-on {
     color: rgb(80, 200, 90);
 }
 
