@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -114,21 +115,53 @@ namespace EditorUIFramework
         }
     }
 
-    /// <summary>enum → EnumField（自动识别 [Flags]）</summary>
+    /// <summary>enum → 按钮 + EnumPickerPopup（带搜索框的弹窗，点击外部关闭）；flags 多选不关窗。</summary>
     public class EnumElement : FieldElement
     {
+        Type _enumType;
+        bool _flags;
+        Button _button;
+
         public EnumElement(FieldData data) : base(data) { }
 
         protected override void OnSetup()
         {
-            var type = Data.BaseType;
-            var value = Data.GetValue() as Enum ?? (Enum)Activator.CreateInstance(type);
-            var flags = type.IsDefined(typeof(FlagsAttribute), false);
-            var field = new EnumField(DisplayName);
-            field.Init(value, flags);
-            field.RegisterValueChangedCallback(e => CommitValue(e.newValue));
-            MainControl = field;
-            Add(field);
+            _enumType = Data.BaseType;
+            _flags = _enumType.IsDefined(typeof(FlagsAttribute), false);
+            var value = Data.GetValue() as Enum ?? (Enum)Activator.CreateInstance(_enumType);
+
+            var row = new VisualElement();
+            row.AddToClassList("eui-row");
+            if (DisplayName.Length > 0)
+            {
+                var label = new Label(DisplayName);
+                label.AddToClassList("eui-field-label");
+                row.Add(label);
+            }
+
+            _button = new Button(ShowPopup) { text = NicifyEnum(value) };
+            _button.AddToClassList("eui-enum-button");
+            _button.style.flexGrow = 1;
+            row.Add(_button);
+
+            MainControl = row;
+            Add(row);
+        }
+
+        void ShowPopup()
+        {
+            var current = Data.GetValue() as Enum ?? (Enum)Activator.CreateInstance(_enumType);
+            EnumPickerPopup.Open(_button.worldBound, _enumType, _flags, current, selected =>
+            {
+                CommitValue(selected);
+                _button.text = NicifyEnum(selected);
+            });
+        }
+
+        static string NicifyEnum(Enum value)
+        {
+            var s = value.ToString();
+            return s == "0" && !Enum.IsDefined(value.GetType(), value) ? "None" : ObjectNames.NicifyVariableName(s);
         }
     }
 

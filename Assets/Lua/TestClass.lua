@@ -2,4 +2,4 @@
 ---@field v1 int v1
 ---@field v2  long
 ---@field v3 List<int>
---_@field v4 Dictionary<string,int>
+---@field v4 Dictionary<string,int>

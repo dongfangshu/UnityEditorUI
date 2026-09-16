@@ -32,3 +32,5 @@ Lua 挂载增强：
 	v3 = { 7, 9 },
 }
 ```
+
+**lua54 实机验证（C:\SoftWare\lua-5.4.2_Win64_bin\lua54.exe）**：导出两份数据（TestClass 数值/列表 + TestClass2 中文转义串/float/bool）写成 `Temp/luadata1.lua`、`Temp/luadata2.lua`，断言脚本 `Temp/luatest.lua` 全过：`ALL LUA ASSERTIONS PASSED`。

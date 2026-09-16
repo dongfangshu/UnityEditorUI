@@ -1,8 +1,9 @@
-/* EditorUIFramework 通用样式表：统一 eui- 前缀类名 */
+/* EditorUIFramework 通用样式表：统一 eui- 前缀类名
+   现代化基调：圆角 + 行悬停 + 主题无关 rgba 叠色（明暗主题均适用） */
 
 .eui-field {
-    margin-top: 1px;
-    margin-bottom: 1px;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 .eui-row {
@@ -12,38 +13,44 @@
 
 .eui-field-label {
     min-width: 120px;
+    opacity: 0.85;
 }
 
+/* 分组：卡片化容器 */
 .eui-foldout {
-    margin-top: 2px;
-    margin-bottom: 2px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 3px 4px;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.07);
+    border-width: 1px;
+    border-color: rgba(128, 128, 128, 0.15);
 }
 
 .eui-header {
     -unity-font-style: bold;
     font-size: 12px;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    opacity: 0.9;
 }
 
 .eui-indent {
     margin-left: 12px;
 }
 
+/* 列表/字典行：圆角 + 悬停反馈 */
 .eui-list-item {
     flex-direction: row;
     align-items: flex-start;
     margin-top: 1px;
     margin-bottom: 1px;
+    padding: 2px 3px;
+    border-radius: 3px;
 }
 
-.eui-list-toolbar {
-    flex-direction: row;
-    margin-top: 2px;
-    margin-bottom: 2px;
-}
-
-.eui-item-button {
-    min-width: 22px;
-    margin-left: 2px;
+.eui-list-item:hover {
+    background-color: rgba(128, 128, 128, 0.10);
 }
 
 .eui-dict-row {
@@ -51,11 +58,52 @@
     align-items: flex-start;
     margin-top: 1px;
     margin-bottom: 1px;
+    padding: 2px 3px;
+    border-radius: 3px;
+}
+
+.eui-dict-row:hover {
+    background-color: rgba(128, 128, 128, 0.10);
 }
 
 .eui-dict-key {
     min-width: 120px;
     -unity-font-style: bold;
+    opacity: 0.85;
+}
+
+.eui-list-toolbar {
+    flex-direction: row;
+    margin-top: 3px;
+    margin-bottom: 2px;
+}
+
+/* 小按钮：圆角 + 悬停 */
+.eui-item-button {
+    min-width: 22px;
+    margin-left: 3px;
+    border-radius: 3px;
+}
+
+/* 可搜索枚举按钮：拟输入框 */
+.eui-enum-button {
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin-left: 0;
+    border-radius: 3px;
+    background-color: rgba(128, 128, 128, 0.10);
+    border-width: 1px;
+    border-color: rgba(128, 128, 128, 0.22);
+}
+
+.eui-enum-button:hover {
+    background-color: rgba(128, 128, 128, 0.18);
+}
+
+.eui-enum-button:active {
+    background-color: rgba(128, 128, 128, 0.25);
 }
 
 .eui-unsupported {
@@ -65,4 +113,54 @@
 
 .eui-error {
     color: rgb(220, 80, 80);
+}
+
+/* 根容器：右 padding 避让滚动条，防溢出裁切 */
+.eui-inspector-root {
+    padding-right: 6px;
+}
+
+/* 行内布局防溢出：字段可收缩，按钮不收缩 */
+.eui-list-item .eui-field,
+.eui-dict-row .eui-field {
+    flex-shrink: 1;
+}
+
+.eui-list-item,
+.eui-dict-row {
+    overflow: hidden;
+}
+
+.eui-item-button {
+    flex-shrink: 0;
+}
+
+/* 枚举搜索弹窗 */
+.eui-enum-popup {
+    padding: 5px;
+}
+
+.eui-enum-search {
+    margin-bottom: 4px;
+}
+
+.eui-enum-item {
+    flex-direction: row;
+    align-items: center;
+    padding: 4px 6px;
+    border-radius: 3px;
+}
+
+.eui-enum-item:hover {
+    background-color: rgba(128, 128, 128, 0.15);
+}
+
+.eui-enum-circle {
+    width: 16px;
+    -unity-text-align: middle-center;
+    color: rgb(150, 150, 150);
+}
+
+.eui-enum-circle-on {
+    color: rgb(80, 200, 90);
 }

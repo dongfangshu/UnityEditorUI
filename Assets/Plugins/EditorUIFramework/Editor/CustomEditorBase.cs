@@ -19,6 +19,7 @@ namespace EditorUIFramework
         public override VisualElement CreateInspectorGUI()
         {
             var container = new VisualElement();
+            container.AddToClassList("eui-inspector-root");
             var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>(UssPath);
             if (uss != null)
                 container.styleSheets.Add(uss);

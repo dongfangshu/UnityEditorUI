@@ -43,6 +43,8 @@ v1 落地：CustomEditorBase（继承 Editor）在创建时反射目标对象构
 - [14-odin-attributes](issues/14-odin-attributes.md) — Odin/Unity 特性兼容层：OdinCompat 零依赖反射读取（Sirenix+UnityEngine 双候选）；Setup 模板方法化；LabelText/Tooltip/HideLabel/ReadOnly/Range/MinMax/TextArea/Title/Header/ShowIf/HideIf/Button 全实测通过
 - [15-lua-host](issues/15-lua-host.md) — LuaHost：EmmyLua 注解解析 + LuaFieldData 值袋（字符串↔类型转换）+ 工厂谓词接 LuaSchemaElement；目录浏览+文件下拉+保值同步；v1/v2 写回实测通过
 - [16-lua-collections](issues/16-lua-collections.md) — lua 泛型集合：LuaTypeMap 递归泛型解析 + LuaValue 字面量往返（Runtime）+ List/DictElement 写回钩子 + LuaHost.GetLuaData() 导出 lua 表
+- [17-searchable-enum-modern-ui](issues/17-searchable-enum-modern-ui.md) — 可搜索枚举（AdvancedDropdown 在 IMGUI.Controls、回调名 ItemSelected）+ USS 现代化（圆角/悬停/rgba 主题无关叠色）
+- [18-enum-picker-popup](issues/18-enum-picker-popup.md) — 枚举弹窗统一改自绘 EnumPickerPopup（PopupWindowContent）：搜索+单选即关/flags 多选圆点+None/All；替代 AdvancedDropdown；布局防溢出修复
 
 **v1 全部票据已解决，目的地达成。**
 
