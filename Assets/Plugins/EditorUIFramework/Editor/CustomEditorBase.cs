@@ -23,6 +23,10 @@ namespace EditorUIFramework
             var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>(UssPath);
             if (uss != null)
                 container.styleSheets.Add(uss);
+            // 框架设置：可选自定义样式表（在内建 USS 之后，可覆盖 eui- 类）
+            var customUss = EditorUIFrameworkSettings.Current.customStyleSheet;
+            if (customUss != null)
+                container.styleSheets.Add(customUss);
 
             OnCreateHeader(container);
 

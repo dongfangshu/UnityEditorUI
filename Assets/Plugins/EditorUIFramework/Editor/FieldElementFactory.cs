@@ -6,7 +6,7 @@ namespace EditorUIFramework
 {
     /// <summary>
     /// 类型工厂：接受 FieldData，按 BaseType 派生不同 FieldElement。
-    /// 分派优先级：注册表精确匹配 &gt; 外部谓词链 &gt; 内建判定（enum/Obj引用/List/Dict/嵌套对象）&gt; Unsupported。
+    /// 分派优先级：自定义绘制特性（CustomDraw）&gt; 注册表精确匹配 &gt; 外部谓词链 &gt; 内建判定（enum/Obj引用/List/Dict/嵌套对象）&gt; Unsupported。
     /// </summary>
     public static class FieldElementFactory
     {
@@ -47,6 +47,10 @@ namespace EditorUIFramework
             // 根节点始终展开自身字段，不按 UnityEngine.Object 引用处理
             if (data is RootFieldData)
                 return new ObjectElement(data);
+
+            // 自定义绘制重定向：字段特性注册了 CustomDraw 时优先级最高
+            if (CustomDrawerRegistry.TryCreate(data, out var custom))
+                return custom;
 
             var t = data.BaseType;
             if (t != null)

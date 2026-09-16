@@ -83,6 +83,9 @@ namespace UIDemo
         [MinValue(0), MaxValue(9999)]
         public long score = 100;
 
+        [EntityIDSelector]
+        public int entityId;
+
         [Button("重置数据")]
         void ResetData()
         {

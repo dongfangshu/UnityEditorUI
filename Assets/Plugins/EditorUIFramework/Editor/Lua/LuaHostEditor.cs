@@ -38,7 +38,10 @@ namespace EditorUIFramework
             var folderRow = new VisualElement();
             folderRow.AddToClassList("eui-row");
 
-            var folderField = new TextField("Lua 目录") { value = Host.luaFolder };
+            var folder = string.IsNullOrEmpty(Host.luaFolder)
+                ? EditorUIFrameworkSettings.Current.defaultLuaFolder
+                : Host.luaFolder;
+            var folderField = new TextField("Lua 目录") { value = folder };
             folderField.style.flexGrow = 1;
             folderField.RegisterValueChangedCallback(e =>
             {
@@ -51,7 +54,7 @@ namespace EditorUIFramework
 
             var browse = new Button(() =>
             {
-                var abs = EditorUtility.OpenFolderPanel("选择 Lua 目录", Host.luaFolder, "");
+                var abs = EditorUtility.OpenFolderPanel("选择 Lua 目录", folderField.value, "");
                 if (string.IsNullOrEmpty(abs)) return;
                 var rel = ToProjectRelative(abs);
                 if (rel == null)

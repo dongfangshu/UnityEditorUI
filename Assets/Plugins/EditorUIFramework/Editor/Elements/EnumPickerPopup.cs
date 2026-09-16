@@ -46,7 +46,7 @@ namespace EditorUIFramework
             return content;
         }
 
-        public override Vector2 GetWindowSize() => new Vector2(240f, 260f);
+        public override Vector2 GetWindowSize() => EditorUIFrameworkSettings.Current.enumPopupSize;
 
         public override void OnOpen()
         {

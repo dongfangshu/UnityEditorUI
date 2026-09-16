@@ -164,3 +164,22 @@
 .eui-enum-circle-on {
     color: rgb(80, 200, 90);
 }
+
+/* 实体选择弹窗：id 列 + 分页栏 */
+.eui-entity-id {
+    margin-left: 6px;
+    opacity: 0.55;
+}
+
+.eui-entity-pager {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.eui-entity-pager-label {
+    min-width: 56px;
+    -unity-text-align: middle-center;
+    opacity: 0.8;
+}
